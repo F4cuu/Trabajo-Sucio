@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://eoy0fc4x0lud"]
+
+[ext_resource type="Script" uid="uid://clx43dcj46a6a" path="res://character_body_2d.gd" id="1_n3u7k"]
+[ext_resource type="Texture2D" uid="uid://crs3ecxkevgkc" path="res://SPRITES/aydua dale antoñito.png" id="2_sw7hb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8xf0"]
+size = Vector2(21, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tk0k2"]
+atlas = ExtResource("2_sw7hb")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l0ald"]
+atlas = ExtResource("2_sw7hb")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cey7j"]
+atlas = ExtResource("2_sw7hb")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p413o"]
+atlas = ExtResource("2_sw7hb")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_odgce"]
+atlas = ExtResource("2_sw7hb")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30a2v"]
+atlas = ExtResource("2_sw7hb")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ng2ce"]
+atlas = ExtResource("2_sw7hb")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1pye1"]
+atlas = ExtResource("2_sw7hb")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tpbrr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tk0k2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l0ald")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cey7j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p413o")
+}],
+"loop": 1,
+"name": &"CORRER",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_odgce")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_30a2v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ng2ce")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1pye1")
+}],
+"loop": 1,
+"name": &"IDLE",
+"speed": 10.0
+}]
+
+[node name="Node2D" type="Node2D" unique_id=1489149912]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1131442846]
+motion_mode = 1
+script = ExtResource("1_n3u7k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=132891184]
+position = Vector2(0.5, 1)
+shape = SubResource("RectangleShape2D_s8xf0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=2137262027]
+sprite_frames = SubResource("SpriteFrames_tpbrr")
+animation = &"CORRER"
+autoplay = "IDLE"
+frame_progress = 0.9819798

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cqokxsdp5x5t2"
+path="res://.godot/imported/Cancion juego (prototipo).mp3-36521443698534bc42ebd5993ddc8166.mp3str"
+
+[deps]
+
+source_file="res://SOUNDS/Cancion juego (prototipo).mp3"
+dest_files=["res://.godot/imported/Cancion juego (prototipo).mp3-36521443698534bc42ebd5993ddc8166.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

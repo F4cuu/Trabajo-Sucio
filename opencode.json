@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "nvidia": {
+      "options": {
+        "apiKey": "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",
+        "baseURL": "https://integrate.api.nvidia.com/v1"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ieqlamcf8br1"]
+
+[ext_resource type="Script" uid="uid://b4sura1a2b3c4" path="res://SCRIPTS/Basura.gd" id="1_bas"]
+[ext_resource type="Texture2D" uid="uid://dop0d36vv515" path="res://SPRITES/basura.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bas"]
+size = Vector2(65, 56)
+
+[node name="Basura" type="Area2D" unique_id=626646680 groups=["basura"]]
+script = ExtResource("1_bas")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=319812707]
+position = Vector2(17.5, -21)
+scale = Vector2(2.09375, 2.3125)
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=909173374]
+position = Vector2(18.5, -14)
+shape = SubResource("RectangleShape2D_bas")

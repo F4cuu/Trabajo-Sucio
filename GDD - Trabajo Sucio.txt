@@ -1,0 +1,83 @@
+INTRODUCCIÓN
+
+El juego es simple. Una pantalla 1920x1080 dividida en 5 columnas. Dividamos la pantalla en tamaño (de izquierda a derecha) en 10 partes. La primera zona izquierda ocupa un espacio de 3 partes. Despues sigue una zona de 1 parte. Le sigue (en el medio) una zona de 2 partes, continuado por una zona idéntica a la anterior, que ocupa 1 parte. Y por ultimo, a la derecha del todo, la ultima parte, la cual es identica a al primera, usando 3 partes.
+
+La primera y la ultima zona (1 y 5), son zonas de juego de ambos jugadores. Pienso hacer un videojuego de 2 jugadores de competencia, estilo topdown inspirado en arte pixelart de las epocas del arcade. Ambas zonas tienen lo mismo, 2 fuentes de objetos pegados a la pared (limite de la pantalla de cada lado, el izquierdo para la zona 1, y el derecho para la zona 5). La primera fuente les otorga BASURA. Debajo de esta fuente, viene la segunda, la cual genera COMIDA. 
+
+Las zonas 2 y 4, que miden lo mismo, son VEREDAS, por las cuales caminan peatones (NPC's), los cuales pueden ser golpeados por la basura que arrojen los jugadores. Los peatones caminaran de Arriba a abajo (o de abajo a arriba, dependiendo de que lado de la pantalla aparezcan), y tienen probabilidad de frenarse repentinamente por unos segundos, o, de pararse en la fila del local de comida para ser un cliente más.
+
+La zona 3 es la CALLE. Esta estará dividida en 2, ya que es una zona de transito de doble mano, donde autos conducirán de arriba a abajo en el lado izquierdo y de abajo a arriba en la zona derecha. 
+
+SINOPSIS
+Resumidamente, la sinopsis es la siguiente: "En un mundo donde el sabor y la preparación de la comida fue sumida en la monotonía, lo único que diferencia y distingue a los más altos restaurantes de comida es... LA HIGIENE. Ambos jugadores representan un local de comida rival del otro. Para decidir que local es el mejor, la comida siempre sabe igual, por lo que deberán sabotearse entre ellos... arrojándose basura."
+
+PUNTAJE y WIN CONDITION
+
+El ganador es decidido por la mayor cantidad de puntos. 
+
+El jugador GANA puntos de las siguientes maneras:
+- Atendiendo a clientes (NPC's que esperaran pacientemente en la puerta del local)
+- Probabilidades bajas de obtener puntos adicionales por un cliente "satisfecho" (10% de chances)
+- Arrojando basura exitosamente a las ventanas del local del frente (rival)
+- Limpiando ventanas de su local.
+
+El jugador PIERDE puntos de las siguientes maneras:
+- Golpeando con basura accidentalmente a autos que esten conduciendo por la calle.
+- Golpeando con basura accidentalmente a peatones que esten caminando por la vereda.
+- No atendiendo a sus clientes a tiempo
+
+Me gustaría que, como no tengo arte (por el momento), empezemos con lo técnico. Como seguramente sabrás, GoDOT poseé una facilidad para dividir elementos en ESCENAS, por lo que vamos a trabajar en eso. Me gustaría que, cuando te lo ordene, comenzemos a crear escenas.
+
+ESCENAS
+
+ESCENA 1, JUGADORES: Me gustaría que la primera escena constituya los controles de ambos jugadores. El jugador 1 (PJ1) será el izquierdo, y el jugador 2 (PJ2), el del lado derecho. Debido a que todavia no tengo arte, simplemente hace un cuadrado de color azul para el PJ1 y uno rojo para el PJ2. Ambos requieren controles para:
+
+- Movimiento (Arriba, abajo, izquierda y derecha.)
+- Recoger (tomar elementos de las fuentes) y Soltar (soltará el elemento que tenga sujeto en las manos con el mismo botón con el que las recogió)
+- Arrojar (con este botón arrojará el objeto que tenga en la mano. Cada objeto tendrá su funcion, como la basura ensuciar y la comida alimentar)
+- Limpiar (Este botón estará definido para realizar la acción únicamente cuando haya una ventana rota cerca del jugador a quemarropa)
+
+JUGADOR 1:
+
+Arriba: W
+Abajo: S
+Derecha: D
+Izquierda: A
+
+Recoger / soltar elemento: C
+
+Arrojar: V
+
+Limpiar: B
+
+JUGADOR 2:
+
+Arriba: Flecha hacia arriba
+Abajo: Flecha hacia abajo
+Derecha: Flecha hacia la derecha
+Izquierda: Flecha hacia la izquierda
+
+Recoger / soltar elemento: O
+
+Arrojar: P
+
+Limpiar: I
+
+
+ESCENA 2, MAPA: Me gustaría que la segunda escena sea la base del juego. Repito, no tengo arte, asi que por el momento me gustaría que simplemente hagas colisiones que separen las zonas de juego. Barreras visibles (color marrón) entre las Zonas 1 y 2, y las Zonas 4 y 5, cosa de que los jugadores NO PUEDAN escaparse de la zona de juego.
+
+ESCENA 3, ENEMIGOS: Como tercer escena, me gustaría un sistema de aparición que establezca 4 puntos. 2 puntos de aparición en las partes superiores de las Zonas 2 y 4 (una y una), justo por arriba de lo visible en pantalla, y 2 puntos de aparicion en las partes inferiores de las Zonas 2 y 4 (una y una), justo pro debajo de lo visible en pantalla. 
+
+Las apariciones serán cada un tiempo aleatorio entre 3 y 15 segundos, y en un punto de aparición aleatorio. Estos NPC's caminaran hacia el punto de aparición contrario. Es decir, si por ejemplo, un NPC's aparece en la zona 2, en la parte inferior, este caminara en línea recta hacia el punto de aparicion de la zona 2, en la parte superior. Desaparecerá cuando llegué al punto de aparición contrario.
+
+Estos NPC's tienen probabilidad de detenerse en un momento aleatorio, con una probabilidad de 1 entre 90 de detenerse por un tiempo aleatorio de entre 1 y 5 segundos. También, tienen probabilidades de detenerse enfrente de la puerta del local que tenga a su lado, y acercarse para convertirse en clientes. Si esto pasa, se convierten en CLIENTES.
+
+Los CLIENTES esperarán 12 segundos a ser atendidos. Si estos reciben COMIDA dentro de los 12 segundos, la comerán, el jugador que lo alimentó recibirá +50 puntos y se irán contentos hacia el punto de aparición contrario del que aparecieron. Si no reciben COMIDA dentro de los 12 segundos, se enojaran, el jugador que NO lo alimentó recibira una penalización de -25 puntos, y el CLIENTE se retirará al punto de aparición contrario al que aparecieron.
+
+Si BASURA arrojada golpea a este NPC, penalizarán con -15 puntos al jugador que arrojó la BASURA.
+
+ESCENA 4, VEHICULOS: Los VEHICULOS, serán NPC's particularmente rápidos... Estos pueden aparecer en 2 tipos de puntos de aparición. El punto de aparición 1  será por encima de la zona 3 (parte mitad izquierda) y se dirijirá a la parte inferior de la zona 3 (parte mitad izquierda). El punto de aparición 2 será por debajo de la zona 3, parte mitad derecha, y se dirigirá a la parte superior de la zona 3, parte mitad derecha.
+
+Estos tienen chances de aparecer cada un tiempo aleatorio entre 5 y 15 segundos. Si BASURA arrojada golpea a este NPC, penalizarán con -15 puntos al jugador que arrojó la BASURA.
+
+
