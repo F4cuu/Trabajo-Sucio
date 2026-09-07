@@ -1,0 +1,203 @@
+[gd_scene format=3 uid="uid://dr58ppo4r23qf"]
+
+[ext_resource type="Script" uid="uid://dr6kng3f3eo8x" path="res://SCRIPTS/MenuPrincipal.gd" id="1_menu"]
+[ext_resource type="FontFile" uid="uid://c4dc7xjl4tngj" path="res://FONTS/PressStart2P-Regular.ttf" id="2_font"]
+[ext_resource type="Texture2D" uid="uid://hgqutqfqbrgk" path="res://SPRITES/FONDO.png" id="3_fondo"]
+[ext_resource type="Texture2D" uid="uid://bql0qb80mroo3" path="res://SPRITES/TITULO.png" id="4_titulo"]
+
+[node name="MenuPrincipal" type="Control" unique_id=100000100]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Fondo" type="TextureRect" parent="." unique_id=100000101]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = -23.0
+offset_right = 2.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_fondo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Titulo" type="TextureRect" parent="." unique_id=100000102]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -127.0
+offset_top = -223.0
+offset_right = 1036.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_titulo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Botones" type="VBoxContainer" parent="." unique_id=100000103]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 498.0
+offset_top = 260.0
+offset_right = 898.0
+offset_bottom = 500.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Jugar" type="Button" parent="Botones" unique_id=100000104]
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "JUGAR"
+
+[node name="Opciones" type="Button" parent="Botones" unique_id=100000105]
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "OPCIONES"
+
+[node name="Salir" type="Button" parent="Botones" unique_id=100000106]
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 24
+text = "SALIR"
+
+[node name="OpcionesPanel" type="Panel" parent="." unique_id=100000107]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -200.0
+offset_right = 350.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="OpcionesPanel" unique_id=100000108]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TituloOpciones" type="Label" parent="OpcionesPanel/VBox" unique_id=100000109]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 28
+text = "OPCIONES"
+horizontal_alignment = 1
+
+[node name="MusicaBox" type="HBoxContainer" parent="OpcionesPanel/VBox" unique_id=100000110]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LabelMusica" type="Label" parent="OpcionesPanel/VBox/MusicaBox" unique_id=100000111]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+text = "MUSICA"
+
+[node name="BtnMusicaMenos" type="Button" parent="OpcionesPanel/VBox/MusicaBox" unique_id=100000112]
+custom_minimum_size = Vector2(50, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+text = "-"
+
+[node name="SliderMusica" type="HSlider" parent="OpcionesPanel/VBox/MusicaBox" unique_id=100000113]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="BtnMusicaMas" type="Button" parent="OpcionesPanel/VBox/MusicaBox" unique_id=100000114]
+custom_minimum_size = Vector2(50, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+text = "+"
+
+[node name="EfectosBox" type="HBoxContainer" parent="OpcionesPanel/VBox" unique_id=100000115]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LabelEfectos" type="Label" parent="OpcionesPanel/VBox/EfectosBox" unique_id=100000116]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+text = "EFECTOS"
+
+[node name="BtnEfectosMenos" type="Button" parent="OpcionesPanel/VBox/EfectosBox" unique_id=100000117]
+custom_minimum_size = Vector2(50, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+text = "-"
+
+[node name="SliderEfectos" type="HSlider" parent="OpcionesPanel/VBox/EfectosBox" unique_id=100000118]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="BtnEfectosMas" type="Button" parent="OpcionesPanel/VBox/EfectosBox" unique_id=100000119]
+custom_minimum_size = Vector2(50, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+text = "+"
+
+[node name="Volver" type="Button" parent="OpcionesPanel/VBox" unique_id=100000120]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 18
+text = "VOLVER"
+
+[connection signal="pressed" from="Botones/Jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="Botones/Opciones" to="." method="_on_opciones_pressed"]
+[connection signal="pressed" from="Botones/Salir" to="." method="_on_salir_pressed"]
+[connection signal="pressed" from="OpcionesPanel/VBox/MusicaBox/BtnMusicaMenos" to="." method="_on_musica_menos"]
+[connection signal="value_changed" from="OpcionesPanel/VBox/MusicaBox/SliderMusica" to="." method="_on_slider_musica"]
+[connection signal="pressed" from="OpcionesPanel/VBox/MusicaBox/BtnMusicaMas" to="." method="_on_musica_mas"]
+[connection signal="pressed" from="OpcionesPanel/VBox/EfectosBox/BtnEfectosMenos" to="." method="_on_efectos_menos"]
+[connection signal="value_changed" from="OpcionesPanel/VBox/EfectosBox/SliderEfectos" to="." method="_on_slider_efectos"]
+[connection signal="pressed" from="OpcionesPanel/VBox/EfectosBox/BtnEfectosMas" to="." method="_on_efectos_mas"]
+[connection signal="pressed" from="OpcionesPanel/VBox/Volver" to="." method="_on_volver"]
