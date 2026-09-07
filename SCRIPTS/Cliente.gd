@@ -10,6 +10,8 @@ var _muerto: bool = false
 var _usar_segundo_sprite: bool = false
 
 func _ready() -> void:
+	z_index = 0
+	z_as_relative = false
 	if direccion_vertical == 0:
 		direccion_vertical = 1
 	_usar_segundo_sprite = randf() < 0.5

@@ -8,6 +8,8 @@ var puntos := 0
 
 
 func _ready() -> void:
+	z_index = 100
+	z_as_relative = false
 	_actualizar()
 
 

@@ -233,7 +233,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yjgxp"]
-size = Vector2(73, 30)
+size = Vector2(70.5, 34)
 
 [node name="PJ1" type="CharacterBody2D" unique_id=1702884950]
 collision_layer = 4
@@ -249,7 +249,7 @@ autoplay = "IDLE"
 frame_progress = 0.31382465
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1539602531]
-position = Vector2(-0.5, 33)
+position = Vector2(0.25, 31)
 shape = SubResource("RectangleShape2D_yjgxp")
 
 [node name="SonidoRevolear" type="AudioStreamPlayer" parent="." unique_id=999999991]
