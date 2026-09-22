@@ -48,7 +48,12 @@ func _physics_process(delta: float) -> void:
 
 	var limpiando := Input.is_physical_key_pressed(KEY_I)
 	if limpiando and not _b_presionada:
-		get_tree().call_group("puntuacion_pj2", "agregar_puntos", 10)
+		# Solo da puntos si hay una ventana sucia cerca: +30 por limpiarla.
+		# Apretar sin ventana sucia no da nada.
+		var v = _get_ventana_sucia_cercana()
+		if v:
+			v.limpiar()
+			get_tree().call_group("puntuacion_pj2", "agregar_puntos", 30, global_position)
 	_b_presionada = limpiando
 
 	var o_ahora := Input.is_physical_key_pressed(KEY_O)
@@ -57,6 +62,14 @@ func _physics_process(delta: float) -> void:
 			var b = _get_basura_cercana()
 			if b:
 				_sostener_basura(b)
+			else:
+				# Sin nada en el piso: pedir a la fuente cercana (horno, heladera...).
+				# La fuente genera solo si no tiene ya un ítem suyo en juego.
+				var f = _get_fuente_cercana()
+				if f:
+					var item = f.solicitar_comida()
+					if item != null:
+						_sostener_basura(item)
 		else:
 			_soltar_basura()
 	_o_presionada = o_ahora
@@ -89,16 +102,47 @@ func _physics_process(delta: float) -> void:
 func _get_basura_cercana() -> Node:
 	var mejor: Node = null
 	var mejor_dist := 80.0
-	for b in get_tree().get_nodes_in_group("basura"):
-		if not is_instance_valid(b):
+	for grupo in ["basura", "comida"]:
+		for b in get_tree().get_nodes_in_group(grupo):
+			if not is_instance_valid(b):
+				continue
+			if b.is_ancestor_of(self) or is_ancestor_of(b):
+				continue
+			if b.has_method("es_proyectil") and b.es_proyectil():
+				continue
+			var d = global_position.distance_to(b.global_position)
+			if d < mejor_dist:
+				mejor = b
+				mejor_dist = d
+	return mejor
+
+
+func _get_fuente_cercana() -> Node:
+	var mejor: Node = null
+	var mejor_dist := 110.0
+	for f in get_tree().get_nodes_in_group("fuente_comida"):
+		if not is_instance_valid(f):
 			continue
-		if b.is_ancestor_of(self) or is_ancestor_of(b):
+		if not f.has_method("solicitar_comida"):
 			continue
-		if b.has_method("es_proyectil") and b.es_proyectil():
-			continue
-		var d = global_position.distance_to(b.global_position)
+		var d = global_position.distance_to((f as Node2D).global_position)
 		if d < mejor_dist:
-			mejor = b
+			mejor = f
+			mejor_dist = d
+	return mejor
+
+
+func _get_ventana_sucia_cercana() -> Node:
+	var mejor: Node = null
+	var mejor_dist := 100.0
+	for w in get_tree().get_nodes_in_group("ventana2"):
+		if not is_instance_valid(w):
+			continue
+		if not w.get("esta_sucia"):
+			continue
+		var d = global_position.distance_to(w.global_position)
+		if d < mejor_dist:
+			mejor = w
 			mejor_dist = d
 	return mejor
 

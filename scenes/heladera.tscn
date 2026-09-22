@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://clht1jhr4l6nl"]
+
+[ext_resource type="Texture2D" uid="uid://b3gps4c6l7kbf" path="res://SPRITES/hornos.png" id="1_ym33h"]
+[ext_resource type="Script" uid="uid://c3xolc8b5d8b8" path="res://SCRIPTS/FuenteComida.gd" id="3_fuente"]
+[ext_resource type="PackedScene" path="res://scenes/Bebida.tscn" id="4_item"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ym33h"]
+atlas = ExtResource("1_ym33h")
+region = Rect2(16, 32, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tpbrr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ym33h")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tpbrr"]
+size = Vector2(126, 54)
+
+[node name="Heladera" type="Node2D" unique_id=162836050]
+script = ExtResource("3_fuente")
+tipo_comida = "bebida"
+escena_comida = ExtResource("4_item")
+
+[node name="Heladera" type="StaticBody2D" parent="." unique_id=281745996]
+collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Heladera" unique_id=655271872]
+position = Vector2(55, -56.5)
+scale = Vector2(7.875, 4.53125)
+sprite_frames = SubResource("SpriteFrames_tpbrr")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Heladera" unique_id=1890072138]
+position = Vector2(55, -11)
+shape = SubResource("RectangleShape2D_tpbrr")

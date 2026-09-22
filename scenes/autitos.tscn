@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://bdmjyd0wdh810"]
+
+[ext_resource type="Texture2D" uid="uid://k4ad8so8maym" path="res://SPRITES/Auto_Sucio.png" id="1_1v6sg"]
+[ext_resource type="Texture2D" uid="uid://cod8rwlnvshyj" path="res://SPRITES/auto_frente.png" id="1_iy24k"]
+[ext_resource type="Texture2D" uid="uid://bh5dyq1tdoapr" path="res://SPRITES/auto_atras.png" id="2_1v6sg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6i0ji"]
+atlas = ExtResource("1_1v6sg")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yjeyf"]
+atlas = ExtResource("1_1v6sg")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xlwso"]
+atlas = ExtResource("1_1v6sg")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6lch"]
+atlas = ExtResource("1_1v6sg")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a7jln"]
+atlas = ExtResource("1_iy24k")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fslsq"]
+atlas = ExtResource("2_1v6sg")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tpbrr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6i0ji")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yjeyf")
+}],
+"loop": 1,
+"name": &"Enojao abajo",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xlwso")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c6lch")
+}],
+"loop": 1,
+"name": &"Enojao arriba",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a7jln")
+}],
+"loop": 1,
+"name": &"abajo",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fslsq")
+}],
+"loop": 1,
+"name": &"arriba",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tpbrr"]
+size = Vector2(64, 75)
+
+[node name="Autitos" type="Node2D" unique_id=668810012]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1376946932]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=992818964]
+position = Vector2(14.5, 24)
+scale = Vector2(1.453125, 1.75)
+sprite_frames = SubResource("SpriteFrames_tpbrr")
+animation = &"Enojao arriba"
+autoplay = "arriba"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1759912617]
+position = Vector2(15, 18.5)
+shape = SubResource("RectangleShape2D_tpbrr")

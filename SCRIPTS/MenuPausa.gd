@@ -28,6 +28,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func toggle_pausa() -> void:
+	# Durante la cuenta regresiva no se puede pausar (el juego ya está congelado)
+	var g = get_tree().get_first_node_in_group("gestor_rondas")
+	if g and bool(g.get("en_cuenta_regresiva")):
+		return
 	if pausado:
 		reanudar()
 	else:

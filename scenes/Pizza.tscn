@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://c0rli1bf3560c" path="res://SCRIPTS/Comida.gd" id="1_com"]
+[ext_resource type="Texture2D" uid="uid://b8s7ow0bxl7n2" path="res://SPRITES/pizza.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_item"]
+size = Vector2(48, 44)
+
+[node name="Pizza" type="Area2D" groups=["comida"]]
+script = ExtResource("1_com")
+tipo_comida = "pizza"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_item")

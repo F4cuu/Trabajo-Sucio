@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://dfismefj3nhgu"]
+
+[ext_resource type="Texture2D" uid="uid://b3gps4c6l7kbf" path="res://SPRITES/hornos.png" id="1_xnpiy"]
+[ext_resource type="Script" uid="uid://c3xolc8b5d8b8" path="res://SCRIPTS/FuenteComida.gd" id="3_fuente"]
+[ext_resource type="PackedScene" path="res://scenes/Hamburguesa.tscn" id="4_item"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tpbrr"]
+size = Vector2(107, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ksh3"]
+atlas = ExtResource("1_xnpiy")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_twfr5"]
+atlas = ExtResource("1_xnpiy")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_an4yx"]
+atlas = ExtResource("1_xnpiy")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tpbrr"]
+animations = [{
+"frames": [],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ksh3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_twfr5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_an4yx")
+}],
+"loop": 1,
+"name": &"new_animation",
+"speed": 5.0
+}]
+
+[node name="Horno" type="Node2D" unique_id=257614588]
+script = ExtResource("3_fuente")
+tipo_comida = "hamburguesa"
+escena_comida = ExtResource("4_item")
+
+[node name="Horno" type="StaticBody2D" parent="." unique_id=706441003]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Horno" unique_id=800162532]
+position = Vector2(37.5, -32)
+shape = SubResource("RectangleShape2D_tpbrr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Horno" unique_id=221192635]
+position = Vector2(37.499996, -40.5)
+scale = Vector2(3.3437498, 3.5312498)
+sprite_frames = SubResource("SpriteFrames_tpbrr")
+animation = &"new_animation"
+autoplay = "new_animation"
+frame_progress = 0.22117203

@@ -45,9 +45,9 @@ func _check_npcs() -> void:
 	for body in get_overlapping_bodies():
 		if body.is_in_group("cliente") and body.has_method("morir"):
 			if jugador_dueno == 1:
-				get_tree().call_group("puntuacion", "agregar_puntos", -15)
+				get_tree().call_group("puntuacion", "agregar_puntos", -15, global_position)
 			elif jugador_dueno == 2:
-				get_tree().call_group("puntuacion_pj2", "agregar_puntos", -15)
+				get_tree().call_group("puntuacion_pj2", "agregar_puntos", -15, global_position)
 			if body.has_method("morir"):
 				if _velocidad != Vector2.ZERO:
 					body.morir(_velocidad)
@@ -60,14 +60,17 @@ func _check_ventanas() -> void:
 	for area in get_overlapping_areas():
 		if area.is_in_group(grupo_objetivo):
 			if jugador_dueno == 1:
-				get_tree().call_group("puntuacion", "agregar_puntos", 15)
+				get_tree().call_group("puntuacion", "agregar_puntos", 15, global_position)
 			elif jugador_dueno == 2:
-				get_tree().call_group("puntuacion_pj2", "agregar_puntos", 15)
+				get_tree().call_group("puntuacion_pj2", "agregar_puntos", 15, global_position)
 			_manshar_ventana(area)
 			queue_free()
 			return
 
 func _manshar_ventana(ventana: Area2D) -> void:
+	if ventana.has_method("ensuciar"):
+		ventana.ensuciar() # marca esta_sucia + muestra el overlay de suciedad
+		return
 	var visual = ventana.get_node_or_null("Visual")
 	if visual == null:
 		return

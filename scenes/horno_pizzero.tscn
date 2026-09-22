@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://b0xfkgq1bxfop"]
+
+[ext_resource type="Texture2D" uid="uid://b3gps4c6l7kbf" path="res://SPRITES/hornos.png" id="2_ra4a0"]
+[ext_resource type="Script" uid="uid://c3xolc8b5d8b8" path="res://SCRIPTS/FuenteComida.gd" id="3_fuente"]
+[ext_resource type="PackedScene" path="res://scenes/Pizza.tscn" id="4_item"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tpbrr"]
+size = Vector2(134, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1q66g"]
+atlas = ExtResource("2_ra4a0")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tpbrr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1q66g")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="HornoPizzero" type="Node2D" unique_id=1103484744]
+script = ExtResource("3_fuente")
+tipo_comida = "pizza"
+escena_comida = ExtResource("4_item")
+
+[node name="Horno pizzero" type="StaticBody2D" parent="." unique_id=996445941]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Horno pizzero" unique_id=1180316881]
+position = Vector2(52, -5.5)
+shape = SubResource("RectangleShape2D_tpbrr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Horno pizzero" unique_id=496806884]
+position = Vector2(51.5, -47.5)
+scale = Vector2(4.21875, 3.96875)
+sprite_frames = SubResource("SpriteFrames_tpbrr")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.14548591

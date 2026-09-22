@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="TRABAJO SUCIO 2.0"
-run/main_scene="uid://dr58ppo4r23qf"
+run/main_scene="uid://dshb2a5j8p8bm"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 

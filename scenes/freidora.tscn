@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://bb6drgr6u6til"]
+
+[ext_resource type="Texture2D" uid="uid://b3gps4c6l7kbf" path="res://SPRITES/hornos.png" id="2_ydcfu"]
+[ext_resource type="Script" uid="uid://c3xolc8b5d8b8" path="res://SCRIPTS/FuenteComida.gd" id="3_fuente"]
+[ext_resource type="PackedScene" path="res://scenes/PapasFritas.tscn" id="4_item"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_shw61"]
+atlas = ExtResource("2_ydcfu")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xomm0"]
+atlas = ExtResource("2_ydcfu")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h0f1y"]
+atlas = ExtResource("2_ydcfu")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tpbrr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_shw61")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xomm0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h0f1y")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fx7qm"]
+size = Vector2(131, 100)
+
+[node name="Freidora" type="Node2D" unique_id=217803378]
+script = ExtResource("3_fuente")
+tipo_comida = "papas"
+escena_comida = ExtResource("4_item")
+
+[node name="Cuerpo" type="StaticBody2D" parent="." unique_id=1109647953]
+position = Vector2(54, 7)
+collision_layer = 1
+collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Cuerpo" unique_id=174512149]
+position = Vector2(-8.500002, -34.500004)
+scale = Vector2(4.28125, 3.15625)
+sprite_frames = SubResource("SpriteFrames_tpbrr")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.0678526
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cuerpo" unique_id=1886420056]
+position = Vector2(-7.5, -35)
+shape = SubResource("RectangleShape2D_fx7qm")

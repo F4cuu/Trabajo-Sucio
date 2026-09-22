@@ -6,6 +6,8 @@ extends Node2D
 @export var intervalo: float = 3.0
 @export var ignorar_superior: bool = false
 @export var ignorar_inferior: bool = false
+# Local destino de los peatones que crea (0 = automático por lado, 1 = PJ1, 2 = PJ2)
+@export var destino_pj: int = 0
 
 @onready var timer: Timer = $Timer
 
@@ -22,6 +24,8 @@ func _spawnear() -> void:
 	c.global_position = global_position + Vector2(offset_x, 0)
 	if c.has_method("configurar_direccion"):
 		c.configurar_direccion(direccion_spawneo)
+	if "destino_forzado" in c:
+		c.set("destino_forzado", destino_pj)
 	if ignorar_superior:
 		var sup = get_parent().get_node_or_null("ParedSuperior")
 		if sup:
