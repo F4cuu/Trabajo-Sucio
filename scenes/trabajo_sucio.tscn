@@ -8804,7 +8804,7 @@ sources/4 = SubResource("TileSetAtlasSource_8hir6")
 sources/5 = SubResource("TileSetAtlasSource_jl6be")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tpbrr"]
-size = Vector2(19, 212)
+size = Vector2(19, 257)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_barrier"]
 size = Vector2(8.5546875, 820.4219)
@@ -8963,6 +8963,7 @@ position = Vector2(1585, 691)
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MuroMostrador2" unique_id=1959864797]
+position = Vector2(0, 22.5)
 shape = SubResource("RectangleShape2D_tpbrr")
 
 [node name="RutaPJ2" type="Node2D" parent="." unique_id=909090918]
