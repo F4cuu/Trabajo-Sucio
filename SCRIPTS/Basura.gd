@@ -63,11 +63,17 @@ func _sonido_boom() -> void:
 func _check_npcs() -> void:
 	for body in get_overlapping_bodies():
 		if body.is_in_group("cliente") and body.has_method("morir"):
+			# Auto ya enojado: inmune, la basura lo atraviesa sin efecto
+			if body.has_method("esta_enojado") and bool(body.esta_enojado()):
+				continue
 			if jugador_dueno == 1:
 				get_tree().call_group("puntuacion", "agregar_puntos", -15, global_position)
 			elif jugador_dueno == 2:
 				get_tree().call_group("puntuacion_pj2", "agregar_puntos", -15, global_position)
-			if body.has_method("morir"):
+			# Auto: se enoja (cambia el sprite y sigue); NPC: muere
+			if body.has_method("es_vehiculo") and body.has_method("enojar"):
+				body.enojar()
+			elif body.has_method("morir"):
 				if _velocidad != Vector2.ZERO:
 					body.morir(_velocidad)
 				else:

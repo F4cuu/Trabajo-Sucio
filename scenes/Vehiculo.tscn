@@ -1,7 +1,74 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://SCRIPTS/Vehiculo.gd" id="1_veh"]
+[ext_resource type="Texture2D" uid="uid://k4ad8so8maym" path="res://SPRITES/Auto_Sucio.png" id="1_sucio"]
 [ext_resource type="Texture2D" uid="uid://cod8rwlnvshyj" path="res://SPRITES/auto_frente.png" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://bh5dyq1tdoapr" path="res://SPRITES/auto_atras.png" id="3_tex"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_enoja"]
+atlas = ExtResource("1_sucio")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_enoja2"]
+atlas = ExtResource("1_sucio")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_enoja3"]
+atlas = ExtResource("1_sucio")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_enoja4"]
+atlas = ExtResource("1_sucio")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abajo"]
+atlas = ExtResource("2_tex")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arriba"]
+atlas = ExtResource("3_tex")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_veh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enoja")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enoja2")
+}],
+"loop": 1,
+"name": &"enojao_abajo",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enoja3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_enoja4")
+}],
+"loop": 1,
+"name": &"enojao_arriba",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abajo")
+}],
+"loop": 1,
+"name": &"abajo",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arriba")
+}],
+"loop": 1,
+"name": &"arriba",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_veh"]
 size = Vector2(84, 120)
@@ -12,9 +79,11 @@ collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_veh")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2.25, 2.25)
-texture = ExtResource("2_tex")
+sprite_frames = SubResource("SpriteFrames_veh")
+animation = &"abajo"
+autoplay = "abajo"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_veh")

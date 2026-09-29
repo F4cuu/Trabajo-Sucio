@@ -269,7 +269,7 @@ script = ExtResource("1_knsmu")
 position = Vector2(1, -1.9999962)
 scale = Vector2(3.3979166, 3.125)
 sprite_frames = SubResource("SpriteFrames_tpbrr")
-animation = &"IDLE"
+animation = &"LIMPIAR"
 autoplay = "IDLE"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1778748828]

@@ -9,6 +9,7 @@ const SAVE_PATH := "user://settings.cfg"
 func _ready() -> void:
 	# Si se vino del podio con la cortina cerrada, abrirla (sin cortina no hace nada)
 	TransicionCortina.abrir(get_tree(), 0.7)
+	_agregar_boton_b_a_aceptar()
 	_cargar_volumenes()
 	slider_musica.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
 	slider_efectos.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
@@ -37,6 +38,21 @@ func _on_jugar_pressed() -> void:
 func _on_opciones_pressed() -> void:
 	panel.visible = true
 	$Botones.visible = false
+	($OpcionesPanel/VBox/MusicaBox/BtnMusicaMenos as Button).grab_focus()
+
+
+# Mando en el menú: el joystick (y la cruceta) ya mueven el foco por las
+# acciones ui_* por defecto; acá se suma el botón B (este) como seleccionar.
+func _agregar_boton_b_a_aceptar() -> void:
+	for e in InputMap.action_get_events("ui_accept"):
+		if e is InputEventJoypadButton and (e as InputEventJoypadButton).button_index == JOY_BUTTON_B:
+			($Botones/Jugar as Button).grab_focus()
+			return
+	var ev := InputEventJoypadButton.new()
+	ev.button_index = JOY_BUTTON_B
+	InputMap.action_add_event("ui_accept", ev)
+	($Botones/Jugar as Button).grab_focus()
+
 
 func _on_salir_pressed() -> void:
 	get_tree().quit()
@@ -44,6 +60,7 @@ func _on_salir_pressed() -> void:
 func _on_volver() -> void:
 	panel.visible = false
 	$Botones.visible = true
+	($Botones/Jugar as Button).grab_focus()
 
 func _on_slider_musica(value: float) -> void:
 	var idx = AudioServer.get_bus_index("Music")

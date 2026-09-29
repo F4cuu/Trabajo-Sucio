@@ -92,6 +92,22 @@ region = Rect2(64, 64, 32, 32)
 atlas = ExtResource("1_xs6bp")
 region = Rect2(96, 64, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_e22tg"]
+atlas = ExtResource("1_xs6bp")
+region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bqfmx"]
+atlas = ExtResource("1_xs6bp")
+region = Rect2(32, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sluvr"]
+atlas = ExtResource("1_xs6bp")
+region = Rect2(64, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_82j2e"]
+atlas = ExtResource("1_xs6bp")
+region = Rect2(96, 192, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_2lu3y"]
 atlas = ExtResource("1_xs6bp")
 region = Rect2(0, 128, 32, 32)
@@ -208,7 +224,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_m8bbn")
+"texture": SubResource("AtlasTexture_e22tg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bqfmx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sluvr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_82j2e")
 }],
 "loop": 1,
 "name": &"LIMPIAR",
@@ -244,9 +269,9 @@ script = ExtResource("2_script")
 position = Vector2(1, -1.9999962)
 scale = Vector2(3.3979166, 3.125)
 sprite_frames = SubResource("SpriteFrames_iy7vd")
-animation = &"IDLE"
+animation = &"LIMPIAR"
 autoplay = "IDLE"
-frame_progress = 0.31382465
+frame_progress = 0.81763595
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1539602531]
 position = Vector2(0.25, 31)
