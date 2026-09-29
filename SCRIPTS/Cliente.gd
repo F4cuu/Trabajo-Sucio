@@ -12,11 +12,15 @@ const TEX_GLOBO := {
 	"bebida": preload("res://SPRITES/quiero_bebida.png"),
 	"papas": preload("res://SPRITES/quiero_papa.png"),
 }
+# Sonidito feliz al ser alimentado (se reproduce con pitch alegre)
+const SONIDO_RICO: AudioStream = preload("res://SOUNDS/Puntitos.wav")
 
 var _en_pausa: bool = false
 var _tiempo_pausa: float = 0.0
 var _tiempo_chequeo: float = 0.0
 var _muerto: bool = false
+# Celebrando tras ser alimentado: quieto en el lugar hasta desaparecer
+var _celebrando: bool = false
 var _usar_segundo_sprite: bool = false
 # Cliente que va a pedir comida: sigue la ruta de su vereda y espera en la fila
 var _va_al_mostrador: bool = false
@@ -53,6 +57,10 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _muerto:
+		return
+	if _celebrando:
+		velocity = Vector2.ZERO
+		move_and_slide()
 		return
 	if _esperando_pedido:
 		velocity = Vector2.ZERO
@@ -137,7 +145,7 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 func morir(direccion: Vector2 = Vector2.ZERO) -> void:
-	if _muerto:
+	if _muerto or _celebrando:
 		return
 	_muerto = true
 	_en_pausa = false
@@ -157,7 +165,96 @@ func morir(direccion: Vector2 = Vector2.ZERO) -> void:
 func _on_death_finished() -> void:
 	queue_free()
 
+
+# Lo llama Comida.gd al alimentar: en vez de desaparecer en seco, el cliente
+# festeja en su lugar (globito que revienta, saltito con squash, estrellitas
+# y sonidito) y recién ahí se va. Libera su slot al terminar.
+func alimentado() -> void:
+	if _muerto or _celebrando:
+		return
+	_celebrando = true
+	_va_al_mostrador = false
+	_moviendose_en_fila = false
+	_esperando_pedido = false
+	_en_pausa = false
+	velocity = Vector2.ZERO
+	remove_from_group("cliente_esperando")
+	_reventar_globo()
+	_sonido_rico()
+	_saltito_feliz()
+	_lluvia_estrellas()
+	await get_tree().create_timer(0.85).timeout
+	queue_free()
+
+
+# El globito del pedido revienta (colapsa rapidito) en vez de apagarse
+func _reventar_globo() -> void:
+	var globo := get_node_or_null("GloboPedido") as Sprite2D
+	if globo == null:
+		return
+	globo.visible = true
+	var tw := globo.create_tween()
+	tw.tween_property(globo, "scale", Vector2.ZERO, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tw.tween_callback(globo.queue_free)
+
+
+# Sonidito feliz: el blip de puntos con pitch alegre y aleatorio
+func _sonido_rico() -> void:
+	var a := AudioStreamPlayer.new()
+	a.stream = SONIDO_RICO
+	a.pitch_scale = randf_range(1.35, 1.6)
+	a.volume_db = -4.0
+	add_child(a)
+	a.finished.connect(a.queue_free)
+	a.play()
+
+
+# Saltito en el lugar: anticipación (agacharse), salto estirado, caída y
+# aplaste al aterrizar. Solo anima el sprite, el cuerpo queda quieto.
+func _saltito_feliz() -> void:
+	var s := _get_sprite_activo()
+	if s == null:
+		return
+	var p0 := s.position
+	var e0 := s.scale
+	var tw := create_tween()
+	tw.tween_property(s, "scale", Vector2(e0.x * 0.85, e0.y * 1.15), 0.1)
+	tw.tween_property(s, "position:y", p0.y - 46.0, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.parallel().tween_property(s, "scale", Vector2(e0.x * 1.1, e0.y * 0.9), 0.25)
+	tw.tween_property(s, "position:y", p0.y, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.tween_property(s, "scale", Vector2(e0.x * 1.25, e0.y * 0.75), 0.08)
+	tw.tween_property(s, "scale", e0, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+# Tres estrellitas que salen de la cabeza, suben girando y se desvanecen
+func _lluvia_estrellas() -> void:
+	var colores := [Color(1.0, 0.45, 0.65), Color(1.0, 0.85, 0.25), Color(0.55, 0.9, 1.0)]
+	for i in 3:
+		var est := Polygon2D.new()
+		est.polygon = _puntos_estrella(13.0, 5.5)
+		est.color = colores[i]
+		est.position = Vector2(19.0 + randf_range(-14.0, 14.0), -50.0)
+		est.z_index = 60
+		est.z_as_relative = false
+		add_child(est)
+		var tw := est.create_tween().set_parallel(true)
+		tw.tween_property(est, "position:y", est.position.y - randf_range(55.0, 85.0), 0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).set_delay(0.08 * i)
+		tw.tween_property(est, "rotation", randf_range(-2.5, 2.5), 0.6).set_delay(0.08 * i)
+		tw.tween_property(est, "modulate:a", 0.0, 0.3).set_delay(0.08 * i + 0.3)
+		tw.chain().tween_callback(est.queue_free)
+
+
+func _puntos_estrella(radio_ext: float, radio_int: float) -> PackedVector2Array:
+	var pts := PackedVector2Array()
+	for i in 10:
+		var radio := radio_ext if i % 2 == 0 else radio_int
+		var ang := -PI / 2.0 + float(i) * PI / 5.0
+		pts.append(Vector2(cos(ang), sin(ang)) * radio)
+	return pts
+
 func es_cliente_esperando() -> bool:
+	if _celebrando:
+		return false
 	if not _esperando_pedido:
 		return false
 	# Con fila: solo el del frente puede ser alimentado.

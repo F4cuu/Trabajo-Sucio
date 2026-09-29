@@ -214,6 +214,8 @@ func _ir_a_podio(ganador_final: String) -> void:
 	PodioScript.ganador = ganador_final
 	PodioScript.victorias_p1 = victorias_p1
 	PodioScript.victorias_p2 = victorias_p2
+	# Cortina cerrándose sobre el gameplay antes de mostrar el podio
+	await TransicionCortina.cerrar(get_tree(), 1.0)
 	get_tree().change_scene_to_file("res://scenes/podio.tscn")
 
 

@@ -12,49 +12,49 @@ const TEX_P2_TRISTE: Texture2D = preload("res://SPRITES/P2_triste.png")
 
 var _salio := false
 
-@onready var titulo: Label = $Titulo
-@onready var puntaje: Label = $Puntaje
-@onready var ganador_tex: TextureRect = $Ganador
-@onready var perdedor_tex: TextureRect = $Perdedor
-@onready var paso_ganador: ColorRect = $PasoGanador
-@onready var paso_perdedor: ColorRect = $PasoPerdedor
+@onready var titulo: Label = get_node_or_null("Titulo") as Label
+@onready var puntaje: Label = get_node_or_null("Puntaje") as Label
+@onready var ganador_tex: TextureRect = get_node_or_null("Ganador") as TextureRect
+@onready var perdedor_tex: TextureRect = get_node_or_null("Perdedor") as TextureRect
+@onready var paso_ganador: ColorRect = get_node_or_null("PasoGanador") as ColorRect
+@onready var paso_perdedor: ColorRect = get_node_or_null("PasoPerdedor") as ColorRect
 
 
 func _ready() -> void:
+	# La cortina se abre revelando el podio (si se vino del gameplay)
+	TransicionCortina.abrir(get_tree())
 	_armar_podio()
 	await get_tree().create_timer(8.0).timeout
 	_salir()
 
 
 func _armar_podio() -> void:
-	puntaje.text = "Rondas  P1: %d - %d :P2" % [victorias_p1, victorias_p2]
+	if puntaje:
+		puntaje.text = "Rondas  P1: %d - %d :P2" % [victorias_p1, victorias_p2]
+	# El ganador siempre va en la tarima alta (plataforma 1): solo cambian
+	# las texturas, las posiciones quedan fijas en la escena.
+	# Los guards evitan un crash si algún nodo se borra desde el editor.
 	if ganador == "P2":
-		titulo.text = "¡GANA P2!"
-		ganador_tex.texture = TEX_P2_WIN
-		perdedor_tex.texture = TEX_P1_TRISTE
-		_mover_a(perdedor_tex, -650, 80, -350, 340)
-		_mover_a(paso_perdedor, -610, 260, -390, 360)
+		if titulo:
+			titulo.text = "¡GANA P2!"
+		if ganador_tex:
+			ganador_tex.texture = TEX_P2_WIN
+		if perdedor_tex:
+			perdedor_tex.texture = TEX_P1_TRISTE
 	elif ganador == "EMPATE":
-		titulo.text = "EMPATE"
-		ganador_tex.texture = TEX_P1_WIN
-		perdedor_tex.texture = TEX_P2_WIN
-		_mover_a(ganador_tex, -350, -70, -50, 190)
-		_mover_a(perdedor_tex, 50, -70, 350, 190)
-		_mover_a(paso_ganador, -320, 245, -80, 360)
-		_mover_a(paso_perdedor, 80, 245, 320, 360)
-		paso_ganador.color = Color(0.5, 0.5, 0.55)
+		if titulo:
+			titulo.text = "EMPATE"
+		if ganador_tex:
+			ganador_tex.texture = TEX_P1_WIN
+		if perdedor_tex:
+			perdedor_tex.texture = TEX_P2_WIN
 	else:
-		titulo.text = "¡GANA P1!"
-		ganador_tex.texture = TEX_P1_WIN
-		perdedor_tex.texture = TEX_P2_TRISTE
-		# Posiciones por defecto del tscn (ganador centro, perdedor derecha)
-
-
-func _mover_a(control: Control, l: float, t: float, r: float, b: float) -> void:
-	control.offset_left = l
-	control.offset_top = t
-	control.offset_right = r
-	control.offset_bottom = b
+		if titulo:
+			titulo.text = "¡GANA P1!"
+		if ganador_tex:
+			ganador_tex.texture = TEX_P1_WIN
+		if perdedor_tex:
+			perdedor_tex.texture = TEX_P2_TRISTE
 
 
 func _on_volver_pressed() -> void:
@@ -65,4 +65,6 @@ func _salir() -> void:
 	if _salio:
 		return
 	_salio = true
+	# La cortina se cierra sobre el podio y el menú la vuelve a abrir
+	await TransicionCortina.cerrar(get_tree(), 0.7)
 	get_tree().change_scene_to_file("res://scenes/MenuPrincipal.tscn")

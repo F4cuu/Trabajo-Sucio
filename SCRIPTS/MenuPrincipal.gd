@@ -7,6 +7,8 @@ extends Control
 const SAVE_PATH := "user://settings.cfg"
 
 func _ready() -> void:
+	# Si se vino del podio con la cortina cerrada, abrirla (sin cortina no hace nada)
+	TransicionCortina.abrir(get_tree(), 0.7)
 	_cargar_volumenes()
 	slider_musica.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
 	slider_efectos.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))

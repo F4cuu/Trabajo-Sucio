@@ -8918,13 +8918,13 @@ position = Vector2(1858, 507)
 position = Vector2(167, 1005)
 
 [node name="HeladeraPJ2" parent="." unique_id=909090943 instance=ExtResource("28_hela")]
-position = Vector2(1635, 392)
+position = Vector2(1801, 389)
 
 [node name="HornoPizzeroPJ1" parent="." unique_id=909090938 instance=ExtResource("25_pizzero")]
 position = Vector2(17, 1010)
 
 [node name="HornoPizzeroPJ2" parent="." unique_id=909090939 instance=ExtResource("25_pizzero")]
-position = Vector2(1798, 394)
+position = Vector2(1639, 391)
 
 [node name="GestorRondas" type="Node" parent="." unique_id=333444558]
 script = ExtResource("6_ronda")
@@ -8975,30 +8975,30 @@ position = Vector2(1827, 940)
 position = Vector2(-499, -277)
 
 [node name="Fila0" type="Marker2D" parent="FilaPJ1" unique_id=909090922]
-position = Vector2(618, 699)
+position = Vector2(609, 505)
 
 [node name="Fila1" type="Marker2D" parent="FilaPJ1" unique_id=909090923]
-position = Vector2(618, 614)
+position = Vector2(610, 571)
 
 [node name="Fila2" type="Marker2D" parent="FilaPJ1" unique_id=909090924]
-position = Vector2(618, 528)
+position = Vector2(610, 634)
 
 [node name="Fila3" type="Marker2D" parent="FilaPJ1" unique_id=909090925]
-position = Vector2(624, 458)
+position = Vector2(610, 704)
 
 [node name="FilaPJ2" type="Node2D" parent="." unique_id=909090926]
 
 [node name="Fila0" type="Marker2D" parent="FilaPJ2" unique_id=909090927]
-position = Vector2(1828, 837)
+position = Vector2(1826, 660)
 
 [node name="Fila1" type="Marker2D" parent="FilaPJ2" unique_id=909090928]
-position = Vector2(1828, 780)
+position = Vector2(1826, 729)
 
 [node name="Fila2" type="Marker2D" parent="FilaPJ2" unique_id=909090929]
-position = Vector2(1826, 732)
+position = Vector2(1828, 788)
 
 [node name="Fila3" type="Marker2D" parent="FilaPJ2" unique_id=909090930]
-position = Vector2(1826, 659)
+position = Vector2(1828, 845)
 
 [node name="VENTANALPJ1" type="StaticBody2D" parent="." unique_id=-2072745075]
 position = Vector2(560, 550)

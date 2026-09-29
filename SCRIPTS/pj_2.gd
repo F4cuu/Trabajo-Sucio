@@ -70,6 +70,14 @@ func _physics_process(delta: float) -> void:
 					var item = f.solicitar_comida()
 					if item != null:
 						_sostener_basura(item)
+				# Si no hubo comida: pedir basura al tacho cercano (a pedido,
+				# igual que la comida; nunca hay basura tirada de antemano).
+				if basura_sostenida == null:
+					var t = _get_tacho_cercano()
+					if t:
+						var b2 = t.solicitar_basura()
+						if b2 != null:
+							_sostener_basura(b2)
 		else:
 			_soltar_basura()
 	_o_presionada = o_ahora
@@ -128,6 +136,21 @@ func _get_fuente_cercana() -> Node:
 		var d = global_position.distance_to((f as Node2D).global_position)
 		if d < mejor_dist:
 			mejor = f
+			mejor_dist = d
+	return mejor
+
+
+func _get_tacho_cercano() -> Node:
+	var mejor: Node = null
+	var mejor_dist := 110.0
+	for t in get_tree().get_nodes_in_group("fuente_basura"):
+		if not is_instance_valid(t):
+			continue
+		if not t.has_method("solicitar_basura"):
+			continue
+		var d = global_position.distance_to((t as Node2D).global_position)
+		if d < mejor_dist:
+			mejor = t
 			mejor_dist = d
 	return mejor
 

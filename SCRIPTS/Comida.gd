@@ -60,11 +60,14 @@ func _check_clientes() -> void:
 				acepta = body.es_cliente_esperando()
 			if not acepta:
 				continue
-			# Alimentar: +50 al jugador que la arrojó, el cliente se va contento
+			# Alimentar: +50 al jugador que la arrojó, el cliente festeja y se va
 			if jugador_dueno == 1:
 				get_tree().call_group("puntuacion", "agregar_puntos", 50, global_position)
 			elif jugador_dueno == 2:
 				get_tree().call_group("puntuacion_pj2", "agregar_puntos", 50, global_position)
-			body.queue_free()
+			if body.has_method("alimentado"):
+				body.alimentado()
+			else:
+				body.queue_free()
 			queue_free()
 			return
