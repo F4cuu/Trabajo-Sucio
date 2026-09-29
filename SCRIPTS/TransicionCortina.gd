@@ -25,7 +25,9 @@ static func cerrar(tree: SceneTree, duracion: float = 1.1) -> void:
 	# Paños recogidos en los bordes (ancho cero) que crecen hacia el medio
 	var izq := _pano(layer, "Izq", 0.0, 0.0, true)
 	var der := _pano(layer, "Der", 1.0, 1.0, false)
-	var tw := layer.create_tween().set_parallel(true)
+	# PROCESS para que la cortina se mueva aunque el árbol esté pausado
+	# (la cuenta regresiva de la ronda pausa el juego)
+	var tw := layer.create_tween().set_parallel(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.tween_property(izq, "anchor_right", 0.5, duracion).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tw.tween_property(der, "anchor_left", 0.5, duracion).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await tw.finished
@@ -42,7 +44,8 @@ static func abrir(tree: SceneTree, duracion: float = 1.1) -> void:
 	if izq == null or der == null:
 		layer.queue_free()
 		return
-	var tw := layer.create_tween().set_parallel(true)
+	# PROCESS para que la cortina se mueva aunque el árbol esté pausado
+	var tw := layer.create_tween().set_parallel(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.tween_property(izq, "anchor_right", 0.0, duracion).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tw.tween_property(der, "anchor_left", 1.0, duracion).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await tw.finished

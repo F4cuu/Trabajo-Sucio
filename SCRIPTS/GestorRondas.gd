@@ -17,6 +17,9 @@ var _pos_inicial_p2: Vector2
 var _tiene_pos_p1: bool = false
 var _tiene_pos_p2: bool = false
 var en_cuenta_regresiva: bool = false
+# Offsets originales del cartel [izq, arriba, der, abajo]: la cuenta usa una
+# caja compacta centrada y al terminar se restauran para los avisos chicos
+var _cartel_offsets: Array = [-600.0, -70.0, 600.0, 70.0]
 
 @onready var label_ronda: Label = get_node_or_null("../RondaUI/LabelRonda") as Label
 @onready var label_tiempo: Label = get_node_or_null("../RondaUI/LabelTiempo") as Label
@@ -195,9 +198,12 @@ func _iniciar_ronda() -> void:
 	en_cuenta_regresiva = true
 	timer.stop()
 	get_tree().paused = true
+	# La cuenta espera a que la cortina termine de abrirse: si no, los
+	# primeros números entran tapados por el paño y solo se los ve salir
+	# por la derecha. Sin cortina (rondas 2/3) no espera nada.
+	await TransicionCortina.abrir(get_tree(), 1.1)
 	if label_cartel:
-		label_cartel.visible = true
-		label_cartel.modulate = Color(1, 1, 1, 1)
+		_preparar_cartel_grande()
 		for n in ["3", "2", "1"]:
 			label_cartel.text = n
 			await get_tree().create_timer(1.0, true).timeout
@@ -219,9 +225,34 @@ func _ir_a_podio(ganador_final: String) -> void:
 	get_tree().change_scene_to_file("res://scenes/podio.tscn")
 
 
+# Deja el cartel en modo cuenta regresiva: caja compacta (320x220) clavada al
+# centro de la pantalla con números gigantes. Guarda el rect original para
+# restaurarlo después en los avisos chicos.
+func _preparar_cartel_grande() -> void:
+	_cartel_offsets = [label_cartel.offset_left, label_cartel.offset_top, label_cartel.offset_right, label_cartel.offset_bottom]
+	# Caja de 600x220 centrada en (961, 542): entra holgado hasta el "¡YA!"
+	# a 170px. +1px en X y +2px en Y respecto al centro del viewport.
+	label_cartel.offset_left = -299.0
+	label_cartel.offset_top = -108.0
+	label_cartel.offset_right = 301.0
+	label_cartel.offset_bottom = 112.0
+	label_cartel.pivot_offset = Vector2(300.0, 110.0)
+	label_cartel.add_theme_font_size_override("font_size", 170)
+	label_cartel.modulate = Color(1, 1, 1, 1)
+	label_cartel.scale = Vector2.ONE
+	label_cartel.visible = true
+
+
 func _mostrar_cartel_ronda() -> void:
 	if label_cartel == null:
 		return
+	# El cartel vuelve a su formato chico de avisos (la cuenta usa caja compacta)
+	label_cartel.add_theme_font_size_override("font_size", 44)
+	label_cartel.offset_left = _cartel_offsets[0]
+	label_cartel.offset_top = _cartel_offsets[1]
+	label_cartel.offset_right = _cartel_offsets[2]
+	label_cartel.offset_bottom = _cartel_offsets[3]
+	label_cartel.scale = Vector2.ONE
 	label_cartel.text = "Comienza RONDA " + str(ronda_actual)
 	label_cartel.visible = true
 	label_cartel.modulate = Color(1, 1, 1, 1)

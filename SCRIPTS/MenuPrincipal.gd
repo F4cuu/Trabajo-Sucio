@@ -31,6 +31,7 @@ func _guardar_volumenes() -> void:
 	cfg.save(SAVE_PATH)
 
 func _on_jugar_pressed() -> void:
+	await TransicionCortina.cerrar(get_tree(), 1.0)
 	get_tree().change_scene_to_file("res://scenes/trabajo_sucio.tscn")
 
 func _on_opciones_pressed() -> void:

@@ -65,6 +65,7 @@ func _on_salir_pressed() -> void:
 
 func _on_menu_principal_pressed() -> void:
 	get_tree().paused = false
+	await TransicionCortina.cerrar(get_tree(), 0.7)
 	get_tree().change_scene_to_file("res://scenes/MenuPrincipal.tscn")
 
 

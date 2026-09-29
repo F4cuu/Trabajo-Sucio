@@ -37,8 +37,8 @@ var _moviendose_en_fila: bool = false
 var _tiempo_chequeo_fila: float = 0.0
 # Destino fijado por el spawner que lo creó (0 = automático por lado, 1 = PJ1, 2 = PJ2)
 var destino_forzado: int = 0
-# PJ2 reserva su slot de fila al decidir ir al mostrador (true = _slot_fila
-# ya está reservado en el grupo y no hay que volver a elegir al llegar)
+# El cliente reserva su slot de fila al decidir ir al mostrador (true =
+# _slot_fila ya está reservado en el grupo y no hay que volver a elegir)
 var _slot_reservado: bool = false
 # Lo que quiere comer ("hamburguesa", "pizza", "bebida" o "papas"). Vacío = acepta todo.
 var pedido: String = ""
@@ -257,13 +257,19 @@ func es_cliente_esperando() -> bool:
 		return false
 	if not _esperando_pedido:
 		return false
-	# Con fila: solo el del frente puede ser alimentado.
-	# PJ1 atiende en Fila0, PJ2 en el slot más alto (pegado a la barra).
-	if _nombre_fila != "":
-		if _nombre_fila == "FilaPJ2":
-			return _slot_fila >= _max_slot_fila()
-		return _slot_fila <= 0
-	return true
+	# Solo el del frente puede ser alimentado (ver _es_frente)
+	return _es_frente()
+
+
+# Solo el del frente muestra lo que quiere pedir: así los carteles no
+# invaden la pantalla y hay que atender en orden para ver el pedido.
+func _es_frente() -> bool:
+	if _nombre_fila == "":
+		return true
+	# PJ1 atiende en Fila0, PJ2 en el slot más alto (pegado a la barra)
+	if _nombre_fila == "FilaPJ2":
+		return _slot_fila >= _max_slot_fila()
+	return _slot_fila <= 0
 
 
 # True si este cliente acepta la comida arrojada: tiene que estar esperando
@@ -292,7 +298,7 @@ func _ir_al_mostrador() -> void:
 	if escena == null:
 		return
 	# Armar ruta con los Marker2D hijos de RutaPJ1/RutaPJ2 (Punto1, Punto2...).
-	# PJ2 también pasa por su Punto1 (puerta del local) para no chocar contra
+	# El cliente pasa por su Punto1 (puerta del local) para no chocar contra
 	# el ventanal/muro, pero reserva YA el lugar desocupado más cercano a la
 	# barra para ir directo a él al salir de la ruta, sin paradas intermedias.
 	_ruta = _cargar_puntos(escena, nombre_ruta)
@@ -304,13 +310,14 @@ func _ir_al_mostrador() -> void:
 		if mostrador == null:
 			return
 		_destino_mostrador = (mostrador as Node2D).global_position
-	if not es_pj1:
-		var slot_pj2 := _pedir_slot_libre()
-		if slot_pj2 >= 0:
-			_slot_fila = slot_pj2
-			_slot_reservado = true
-			add_to_group("cliente_en_fila")
-			_destino_mostrador = _posicion_slot(escena, _nombre_fila, slot_pj2)
+	# Reserva inmediata del lugar desocupado más cercano a la barra (vale para
+	# ambos lados): queda apartado en el grupo y nadie lo ocupa en el camino.
+	var slot_reserva := _pedir_slot_libre()
+	if slot_reserva >= 0:
+		_slot_fila = slot_reserva
+		_slot_reservado = true
+		add_to_group("cliente_en_fila")
+		_destino_mostrador = _posicion_slot(escena, _nombre_fila, slot_reserva)
 	# Sin entrada en L: el cliente va DIRECTO al Punto1 fijo de su ruta
 	# (Spawner2/3 -> Punto1 de RutaPJ1, Spawner/4 -> Punto1 de RutaPJ2)
 	# y de ahí sigue Punto2, Punto3... en orden, esté donde esté.
@@ -404,7 +411,9 @@ func _llegar_a_fila() -> void:
 	_esperando_pedido = true
 	velocity = Vector2.ZERO
 	add_to_group("cliente_esperando")
-	_mostrar_globo(true)
+	_actualizar_z_fila()
+	# El globito solo aparece si está primero: al avanzar al frente se revela
+	_mostrar_globo(_es_frente())
 	var s_fila = _get_sprite_activo()
 	if s_fila:
 		if _nombre_fila == "FilaPJ2":
@@ -428,7 +437,7 @@ func _bloqueado_cerca(dist_objetivo: float, limite: float = 70.0) -> bool:
 	return get_real_velocity().length() < velocidad * 0.2
 
 
-# PJ2: al terminar la ruta va DIRECTO al slot reservado al decidirse,
+# Al terminar la ruta va DIRECTO al slot reservado al decidirse,
 # sin volver a elegir ni frenar en puntos intermedios.
 # Devuelve true si tenía reserva (ya queda caminando hacia su slot).
 func _ir_a_slot_reservado() -> bool:
@@ -447,6 +456,18 @@ func _ir_a_slot_reservado() -> bool:
 	return true
 
 
+# Profundidad en la fila: el del frente se ve por encima del segundo, el
+# segundo por encima del tercero, etc. Sin slot vuelve a z 0.
+func _actualizar_z_fila() -> void:
+	if _nombre_fila == "" or _slot_fila < 0:
+		z_index = 0
+		return
+	if _nombre_fila == "FilaPJ2":
+		z_index = _slot_fila
+	else:
+		z_index = _max_slot_fila() - _slot_fila
+
+
 func _entrar_en_fila() -> void:
 	var escena = get_tree().current_scene
 	var slot := _pedir_slot_libre()
@@ -455,6 +476,7 @@ func _entrar_en_fila() -> void:
 		var era_pj2 := _nombre_fila == "FilaPJ2"
 		_nombre_fila = ""
 		_slot_fila = -1
+		_actualizar_z_fila()
 		_esperando_pedido = true
 		velocity = Vector2.ZERO
 		add_to_group("cliente_esperando")
@@ -504,10 +526,9 @@ func _chequear_avance_fila(delta: float) -> void:
 	_mostrar_globo(false)
 
 
-# Devuelve el slot libre de índice más alto. En PJ1 eso es el fondo de la
-# cola (entra atrás y avanza hacia Fila0); en PJ2 es el lugar desocupado
-# más cercano a la barra (el primero entra a Fila3 y los siguientes encolan
-# detrás, avanzando hacia el slot más alto). Devuelve -1 si está llena.
+# Devuelve el slot libre más cercano a la barra de su fila: en PJ1 es el de
+# índice más bajo (Fila0, pegado al mostrador) y en PJ2 el más alto (Fila3).
+# Los siguientes encolan detrás y avanzan hacia su frente. -1 si está llena.
 func _pedir_slot_libre() -> int:
 	var escena = get_tree().current_scene
 	if escena == null or _nombre_fila == "":
@@ -516,6 +537,11 @@ func _pedir_slot_libre() -> int:
 	if fila == null:
 		return -1
 	var slots := _hijos_marker_ordenados(fila)
+	if _nombre_fila == "FilaPJ1":
+		for i in range(slots.size()):
+			if not _slot_ocupado(_nombre_fila, i):
+				return i
+		return -1
 	for i in range(slots.size() - 1, -1, -1):
 		if not _slot_ocupado(_nombre_fila, i):
 			return i

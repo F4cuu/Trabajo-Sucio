@@ -1,6 +1,8 @@
 extends Node
 
 func _ready() -> void:
+	# La cortina la abre GestorRondas al iniciar la cuenta (después de este
+	# _ready), para que los números no entren mientras se abre el telón.
 	var cfg = ConfigFile.new()
 	if cfg.load("user://settings.cfg") == OK:
 		var m = cfg.get_value("audio", "music", 1.0)
