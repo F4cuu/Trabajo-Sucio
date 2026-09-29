@@ -9,6 +9,12 @@ const JOY_AGARRAR = JOY_BUTTON_A
 const JOY_LIMPIAR = JOY_BUTTON_B
 const JOY_LANZAR = JOY_BUTTON_X
 const JOY_DEADZONE := 0.25
+# Sonidos de lanzamiento: uno al azar (33% c/u) en cada tiro
+const SONIDOS_REVOLEAR: Array[AudioStream] = [
+	preload("res://SOUNDS/revolear.wav"),
+	preload("res://SOUNDS/revolear2.wav"),
+	preload("res://SOUNDS/revolear3.wav"),
+]
 
 var _joy_id: int = -1
 
@@ -107,6 +113,7 @@ func _physics_process(delta: float) -> void:
 			_revolear_tiempo = 0.0
 			$AnimatedSprite2D.play("REVOLEAR BASURA")
 			if has_node("SonidoRevolear"):
+				$SonidoRevolear.stream = SONIDOS_REVOLEAR.pick_random()
 				$SonidoRevolear.play()
 			_arrojar_basura()
 	_c_presionada = c_ahora

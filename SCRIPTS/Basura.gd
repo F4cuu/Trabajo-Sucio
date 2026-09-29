@@ -2,6 +2,12 @@ extends Area2D
 
 var grupo_objetivo: String = "ventana1"
 var jugador_dueno: int = 0
+# Sonidos de impacto (ventana, auto o npc): uno al azar (33% c/u)
+const SONIDOS_BOOM: Array[AudioStream] = [
+	preload("res://SOUNDS/Boom1.wav"),
+	preload("res://SOUNDS/Boom2.wav"),
+	preload("res://SOUNDS/Boom4.wav"),
+]
 var _es_proyectil: bool = false
 var _velocidad: Vector2 = Vector2.ZERO
 var _sostenida: bool = false
@@ -41,6 +47,19 @@ func lanzar(vel: Vector2) -> void:
 func recoger() -> void:
 	queue_free()
 
+# Boom posicional en el punto de impacto. El reproductor se cuelga del padre
+# porque la basura se libera en el mismo frame y cortaría el sonido.
+func _sonido_boom() -> void:
+	var p := get_parent()
+	if p == null:
+		return
+	var a := AudioStreamPlayer2D.new()
+	a.stream = SONIDOS_BOOM.pick_random()
+	p.add_child(a)
+	a.global_position = global_position
+	a.finished.connect(a.queue_free)
+	a.play()
+
 func _check_npcs() -> void:
 	for body in get_overlapping_bodies():
 		if body.is_in_group("cliente") and body.has_method("morir"):
@@ -53,6 +72,7 @@ func _check_npcs() -> void:
 					body.morir(_velocidad)
 				else:
 					body.morir(Vector2.ZERO)
+			_sonido_boom()
 			queue_free()
 			return
 
@@ -64,6 +84,7 @@ func _check_ventanas() -> void:
 			elif jugador_dueno == 2:
 				get_tree().call_group("puntuacion_pj2", "agregar_puntos", 15, global_position)
 			_manshar_ventana(area)
+			_sonido_boom()
 			queue_free()
 			return
 

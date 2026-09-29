@@ -70,19 +70,19 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tpbrr"]
-size = Vector2(64, 75)
+size = Vector2(98, 129)
 
 [node name="Autitos" type="Node2D" unique_id=668810012]
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1376946932]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=992818964]
-position = Vector2(14.5, 24)
-scale = Vector2(1.453125, 1.75)
+position = Vector2(33.500004, 55)
+scale = Vector2(2.0468752, 2.71875)
 sprite_frames = SubResource("SpriteFrames_tpbrr")
-animation = &"Enojao arriba"
+animation = &"arriba"
 autoplay = "arriba"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1759912617]
-position = Vector2(15, 18.5)
+position = Vector2(32, 45.5)
 shape = SubResource("RectangleShape2D_tpbrr")

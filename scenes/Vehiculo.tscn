@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cod8rwlnvshyj" path="res://SPRITES/auto_frente.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_veh"]
-size = Vector2(56, 80)
+size = Vector2(84, 120)
 
 [node name="Vehiculo" type="CharacterBody2D" groups=["cliente"]]
 collision_layer = 8
@@ -13,7 +13,7 @@ motion_mode = 1
 script = ExtResource("1_veh")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(1.5, 1.5)
+scale = Vector2(2.25, 2.25)
 texture = ExtResource("2_tex")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
