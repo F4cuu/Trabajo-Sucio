@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dshb2a5j8p8bm"]
 
-[ext_resource type="Script" uid="uid://c20ksv7wjbnvh" path="res://SCRIPTS/Juego.gd" id="0_juego"]
+[ext_resource type="Script" uid="uid://b4kpiw8l0rgpp" path="res://SCRIPTS/Juego.gd" id="0_juego"]
 [ext_resource type="PackedScene" uid="uid://dcs3bvfivbnwg" path="res://scenes/PJ1.tscn" id="1_j477q"]
 [ext_resource type="PackedScene" uid="uid://dbpkh60jpwi78" path="res://scenes/pj_2.tscn" id="2_75rkc"]
 [ext_resource type="Script" uid="uid://0ev6o350mykn" path="res://SCRIPTS/Puntuacion.gd" id="2_punt"]

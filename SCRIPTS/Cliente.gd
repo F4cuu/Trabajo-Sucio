@@ -456,16 +456,17 @@ func _ir_a_slot_reservado() -> bool:
 	return true
 
 
-# Profundidad en la fila: el del frente se ve por encima del segundo, el
-# segundo por encima del tercero, etc. Sin slot vuelve a z 0.
+# Profundidad en la fila. PJ1: el del frente se ve por encima del segundo,
+# el segundo por encima del tercero, etc. PJ2 (al revés): el último se ve
+# por encima del siguiente (el primero queda debajo del segundo, etc).
+# Sin slot vuelve a z 0.
 func _actualizar_z_fila() -> void:
 	if _nombre_fila == "" or _slot_fila < 0:
 		z_index = 0
 		return
-	if _nombre_fila == "FilaPJ2":
-		z_index = _slot_fila
-	else:
-		z_index = _max_slot_fila() - _slot_fila
+	# A más bajo el slot, más arriba se dibuja: en PJ1 el frente (Fila0)
+	# queda encima y en PJ2 el último (Fila0) queda encima del resto.
+	z_index = _max_slot_fila() - _slot_fila
 
 
 func _entrar_en_fila() -> void:

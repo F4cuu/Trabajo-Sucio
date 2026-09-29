@@ -3,6 +3,14 @@ extends CharacterBody2D
 
 const SPEED = 400.0
 const BASURA_VELOCIDAD: float = 700.0
+# Mando (vale Xbox y PS por posición): joystick = moverse, A(sur) = agarrar,
+# B(este) = limpiar, X(oeste) = lanzar. PJ2 usa el segundo mando conectado.
+const JOY_AGARRAR = JOY_BUTTON_A
+const JOY_LIMPIAR = JOY_BUTTON_B
+const JOY_LANZAR = JOY_BUTTON_X
+const JOY_DEADZONE := 0.25
+
+var _joy_id: int = -1
 
 var _b_presionada := false
 var _o_presionada := false
@@ -34,6 +42,12 @@ func _physics_process(delta: float) -> void:
 	if direction != Vector2.ZERO:
 		direction = direction.normalized()
 		ultima_direccion = direction
+	_actualizar_mando()
+	if direction == Vector2.ZERO:
+		var joy := _eje_mando()
+		if joy != Vector2.ZERO:
+			direction = joy.normalized()
+			ultima_direccion = direction
 	if direction != Vector2.ZERO:
 		velocity = direction * SPEED
 	else:
@@ -46,7 +60,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	var limpiando := Input.is_physical_key_pressed(KEY_I)
+	var limpiando := Input.is_physical_key_pressed(KEY_I) or _boton_mando(JOY_LIMPIAR)
 	if limpiando and not _b_presionada:
 		# Solo da puntos si hay una ventana sucia cerca: +30 por limpiarla.
 		# Apretar sin ventana sucia no da nada.
@@ -56,7 +70,7 @@ func _physics_process(delta: float) -> void:
 			get_tree().call_group("puntuacion_pj2", "agregar_puntos", 30, global_position)
 	_b_presionada = limpiando
 
-	var o_ahora := Input.is_physical_key_pressed(KEY_O)
+	var o_ahora := Input.is_physical_key_pressed(KEY_O) or _boton_mando(JOY_AGARRAR)
 	if o_ahora and not _o_presionada:
 		if basura_sostenida == null:
 			var b = _get_basura_cercana()
@@ -82,7 +96,7 @@ func _physics_process(delta: float) -> void:
 			_soltar_basura()
 	_o_presionada = o_ahora
 
-	var p_ahora := Input.is_physical_key_pressed(KEY_P)
+	var p_ahora := Input.is_physical_key_pressed(KEY_P) or _boton_mando(JOY_LANZAR)
 	if p_ahora and not _p_presionada:
 		if basura_sostenida != null and not esta_revoleando:
 			esta_revoleando = true
@@ -105,6 +119,28 @@ func _physics_process(delta: float) -> void:
 		$AnimatedSprite2D.play("CORRER")
 	else:
 		$AnimatedSprite2D.play("IDLE")
+
+
+# Mando: PJ2 usa el segundo joypad conectado (-1 = solo teclado).
+# Se actualiza cada frame para soportar conectar/desconectar en caliente.
+func _actualizar_mando() -> void:
+	var pads := Input.get_connected_joypads()
+	_joy_id = pads[1] if pads.size() > 1 else -1
+
+
+func _eje_mando() -> Vector2:
+	if _joy_id < 0:
+		return Vector2.ZERO
+	var v := Vector2(
+		Input.get_joy_axis(_joy_id, JOY_AXIS_LEFT_X),
+		Input.get_joy_axis(_joy_id, JOY_AXIS_LEFT_Y))
+	if v.length() < JOY_DEADZONE:
+		return Vector2.ZERO
+	return v.limit_length(1.0)
+
+
+func _boton_mando(boton: int) -> bool:
+	return _joy_id >= 0 and Input.is_joy_button_pressed(_joy_id, boton)
 
 
 func _get_basura_cercana() -> Node:
